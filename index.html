@@ -597,7 +597,6 @@ function decide(accepted) {
   feedback.innerHTML = `
     <h2>${correct ? "CORRECT CALL!" : "INCORRECT DECISION!"}</h2>
     <p>${explanation}</p>
-    <p>Mistakes: ${mistakes}/2</p>
     <div class="btns">${nextButton}</div>
   `;
 }
@@ -726,7 +725,7 @@ function ending(choice) {
         <span>Mistakes</span>
       </div>
       <div class="stat">
-        <strong>${mistakes >= 3 ? "GUILTY" : perfect ? "CLEAN" : "REVIEW"}</strong>
+        <strong>${mistakes >= 2 ? "GUILTY" : perfect ? "CLEAN" : "REVIEW"}</strong>
         <span>Final record</span>
       </div>
     </div>
