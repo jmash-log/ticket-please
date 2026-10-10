@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket Please, Your Majesty!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&family=Bowlby+One+SC&display=swap');
+
+:root {
+  --red:#ff4438; --yellow:#f5ff38; --blue:#3957ff;
+  --green:#b6ff7a; --pink:#ff8fd8; --cream:#fff4d6;
+  --black:#171713; --white:#fffdf5;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--blue); color:var(--black);
+  font-family:"Space Grotesk",sans-serif;
+  background-image:radial-gradient(#fff 1px,transparent 1px);
+  background-size:12px 12px;
+}
+button { font:inherit; cursor:pointer; color:inherit; }
+button:focus-visible { outline:4px dashed var(--blue); outline-offset:4px; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+button:hover:not(:disabled) { transform:translate(-3px,-3px) rotate(-1deg); box-shadow:7px 7px 0 var(--black); }
+#app { max-width:1150px; margin:auto; padding:20px; }
+.top {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; color:white; margin-bottom:18px;
+  font:700 11px "DM Mono",monospace; text-transform:uppercase;
+}
+.brand { font-size:14px; transform:rotate(-2deg); }
+.brand span { background:var(--yellow); color:var(--black); padding:4px; }
+.live { border:2px solid white; padding:8px; transform:rotate(2deg); }
+.board {
+  position:relative; background:var(--cream); border:4px solid var(--black);
+  box-shadow:12px 12px 0 var(--black); min-height:650px; overflow:hidden;
+}
+.board:before {
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.12;
+  background-image:radial-gradient(var(--black) .7px,transparent .7px);
+  background-size:6px 6px;
+}
+.screen { position:relative; padding:clamp(22px,5vw,60px); }
+.kicker {
+  display:inline-block; background:var(--yellow); padding:6px 9px;
+  font:700 11px "DM Mono",monospace; text-transform:uppercase;
+  transform:rotate(-2deg); margin-bottom:16px;
+}
+h1,h2,h3,p { margin-top:0; }
+h1 {
+  font:normal clamp(42px,8vw,94px)/.88 "Bowlby One SC",sans-serif;
+  text-transform:uppercase; letter-spacing:-2px; margin-bottom:24px;
+}
+h1 .red { color:var(--red); text-shadow:4px 4px var(--black); }
+h2 { font-size:clamp(24px,4vw,42px); line-height:1; }
+h3 { font-size:21px; }
+p { line-height:1.6; }
+.lead { font-size:18px; max-width:650px; }
+.small { font:11px "DM Mono",monospace; text-transform:uppercase; }
+.big-btn {
+  display:inline-block; background:var(--yellow); border:3px solid var(--black);
+  box-shadow:5px 5px 0 var(--black); padding:16px 21px;
+  font-weight:700; text-transform:uppercase; transition:.15s;
+}
+.red-btn { background:var(--red); color:white; }
+.blue-btn { background:var(--blue); color:white; }
+.green-btn { background:var(--green); }
+.btns { display:flex; flex-wrap:wrap; gap:13px; margin-top:24px; }
+.sticker {
+  position:absolute; right:6%; top:9%; background:var(--pink);
+  border:3px solid var(--black); padding:13px; font-weight:700;
+  transform:rotate(12deg); box-shadow:4px 4px var(--black);
+}
+.tape {
+  display:inline-block; background:var(--pink); padding:4px 8px;
+  font:700 10px "DM Mono",monospace; transform:rotate(-3deg);
+}
+.intro-logo {
+  display:inline-block; background:var(--red); color:white;
+  padding:15px; border:4px solid var(--black);
+  box-shadow:9px 9px var(--black); transform:rotate(-3deg);
+  margin:15px 0 30px;
+}
+.intro-logo h1 { margin:0; font-size:clamp(38px,8vw,80px); }
+.intro-logo span { color:var(--yellow); }
+.seal {
+  width:110px; height:110px; border-radius:50%;
+  background:var(--red); color:white; border:5px double var(--yellow);
+  box-shadow:0 0 0 5px var(--black);
+  font:700 13px "DM Mono",monospace;
+  display:grid; place-items:center; text-align:center;
+  transform:rotate(15deg); position:absolute; right:12%; bottom:17%;
+  animation:bob 2s ease-in-out infinite;
+}
+@keyframes bob { 50% { transform:rotate(-9deg) scale(1.07); } }
+@keyframes slam {
+  0% { transform:translateY(-180px) rotate(25deg) scale(2); opacity:0; }
+  70% { transform:translateY(8px) rotate(-12deg); opacity:1; }
+  100% { transform:translateY(0) rotate(-8deg); }
+}
+@keyframes wobble {
+  0%,100% { transform:rotate(-1deg); }
+  50% { transform:rotate(1deg); }
+}
+.stamp-anim { animation:slam .45s ease-out; }
+.blackout {
+  background:var(--black); color:var(--yellow); min-height:470px;
+  display:grid; place-items:center; text-align:center;
+  font:700 clamp(23px,5vw,50px) "DM Mono",monospace;
+}
+.blackout small { color:white; font-size:13px; display:block; margin-top:18px; }
+.letter {
+  background:#fffdf5; border:3px solid var(--black);
+  padding:clamp(18px,4vw,35px); max-width:760px;
+  box-shadow:9px 9px 0 var(--red); transform:rotate(-.6deg);
+  position:relative;
+}
+.letter:before {
+  content:"ROYAL RAILWAY AUTHORITY // EXTREMELY OFFICIAL";
+  display:block; background:var(--red); color:white;
+  padding:11px; margin:-12px -12px 22px;
+  font:700 11px "DM Mono",monospace;
+}
+.letter:after {
+  content:"APPROVED-ish"; position:absolute; right:15px; bottom:18px;
+  border:4px double var(--red); color:var(--red); padding:8px;
+  font:700 13px "DM Mono",monospace; transform:rotate(-15deg);
+}
+.dialogue {
+  background:var(--pink); border:3px solid var(--black);
+  padding:20px; margin:25px 0; box-shadow:6px 6px var(--black);
+  transform:rotate(.5deg); max-width:780px;
+}
+.speaker {
+  display:inline-block; background:var(--black); color:var(--yellow);
+  padding:5px 8px; font:700 11px "DM Mono",monospace;
+  text-transform:uppercase; margin-bottom:10px;
+}
+.dialogue p:last-child { margin-bottom:0; }
+.rule-grid {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px; margin:28px 0;
+}
+.rule {
+  padding:17px; border:3px solid var(--black);
+  background:var(--green); box-shadow:5px 5px var(--black);
+}
+.rule:nth-child(2) { background:var(--pink); transform:rotate(2deg); }
+.rule:nth-child(3) { background:var(--yellow); transform:rotate(-2deg); }
+.rule .num { font:700 12px "DM Mono",monospace; }
+.rule h3 { margin:14px 0 8px; }
+.rule p { font-size:14px; margin:0; }
+.rule.inactive { background:#ddd; opacity:.65; }
+.notice {
+  padding:15px; background:var(--yellow); border:3px dashed var(--black);
+  margin:22px 0; transform:rotate(.5deg);
+}
+.station {
+  margin:30px 0; padding:20px; background:var(--blue);
+  border:4px solid var(--black); color:white; position:relative;
+  min-height:220px; overflow:hidden;
+}
+.station-sign {
+  background:var(--yellow); color:var(--black); border:3px solid var(--black);
+  padding:10px; display:inline-block; font:700 12px "DM Mono",monospace;
+  transform:rotate(-3deg);
+}
+.train {
+  position:absolute; bottom:22px; left:10%; width:77%; height:75px;
+  background:var(--red); border:4px solid var(--black);
+  border-radius:10px 35px 0 0; box-shadow:inset 0 -13px #b52824;
+  animation:wobble 3s infinite;
+}
+.train:before {
+  content:"ROYAL EXPRESS ✦ LATE AGAIN"; position:absolute;
+  top:22px; left:70px; font:700 11px "DM Mono",monospace;
+  color:var(--yellow);
+}
+.train:after {
+  content:""; position:absolute; left:14px; top:12px;
+  width:37px; height:27px; background:var(--green); border:3px solid var(--black);
+}
+.wheel {
+  position:absolute; bottom:-15px; left:25%; width:29px; height:29px;
+  border-radius:50%; background:var(--yellow); border:5px solid var(--black);
+}
+.wheel.two { left:72%; }
+.layout {
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(230px,.85fr);
+  gap:23px; align-items:start;
+}
+.ticket {
+  position:relative; background:var(--white); border:3px solid var(--black);
+  box-shadow:8px 8px var(--red); padding:22px;
+  clip-path:polygon(0 0,100% 0,100% 96%,97% 100%,94% 96%,91% 100%,88% 96%,85% 100%,82% 96%,79% 100%,76% 96%,73% 100%,70% 96%,67% 100%,64% 96%,61% 100%,58% 96%,55% 100%,52% 96%,49% 100%,46% 96%,43% 100%,40% 96%,37% 100%,34% 96%,31% 100%,28% 96%,25% 100%,22% 96%,19% 100%,16% 96%,13% 100%,10% 96%,7% 100%,4% 96%,0 100%);
+}
+.ticket-title { font:700 12px "DM Mono",monospace; color:var(--red); }
+.passenger-name { font-size:clamp(25px,4vw,38px); overflow-wrap:anywhere; }
+.field { border-top:2px dashed #aaa; padding:12px 0; }
+.field span {
+  display:block; color:#68645c; font:700 10px "DM Mono",monospace;
+  margin-bottom:5px;
+}
+.field strong { font-size:17px; overflow-wrap:anywhere; }
+.aside {
+  background:var(--yellow); border:3px solid var(--black);
+  padding:18px; transform:rotate(1deg); box-shadow:6px 6px var(--black);
+}
+.quote { font-size:20px; font-weight:700; }
+.laws { border-top:3px solid var(--black); padding-top:12px; margin-top:18px; }
+.law {
+  padding:9px 0; border-bottom:1px dashed #555;
+  font:700 12px "DM Mono",monospace;
+}
+.law.good:before { content:"✓ "; color:#08713a; }
+.law.bad:before { content:"✗ "; color:var(--red); }
+.progress { display:flex; gap:7px; margin-bottom:25px; }
+.progress span {
+  flex:1; height:10px; background:#bbb; border:2px solid var(--black);
+  transform:rotate(-2deg);
+}
+.progress span.on { background:var(--red); }
+.feedback {
+  background:var(--green); border:3px solid var(--black);
+  padding:20px; margin-top:25px; box-shadow:6px 6px var(--black);
+}
+.feedback.wrong { background:var(--pink); }
+.options {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px; margin-top:20px;
+}
+.option {
+  text-align:left; background:var(--yellow); border:3px solid var(--black);
+  padding:14px; box-shadow:4px 4px var(--black);
+}
+.option:nth-child(2) { background:var(--pink); }
+.option:nth-child(3) { background:var(--green); }
+.option strong { display:block; margin-bottom:8px; }
+.stats {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px; margin:25px 0;
+}
+.stat { background:var(--pink); border:3px solid var(--black); padding:15px; }
+.stat:nth-child(2) { background:var(--yellow); transform:rotate(2deg); }
+.stat:nth-child(3) { background:var(--green); transform:rotate(-2deg); }
+.stat strong { display:block; font:normal 35px "Bowlby One SC",sans-serif; }
+.stat span { font:700 10px "DM Mono",monospace; }
+.footer {
+  display:flex; justify-content:space-between; gap:12px; margin-top:20px;
+  color:white; font:10px "DM Mono",monospace; text-transform:uppercase;
+}
+.hidden { display:none!important; }
+@media(max-width:700px) {
+  #app { padding:12px; }
+  .top { align-items:flex-start; }
+  .screen { padding:22px; }
+  .rule-grid,.options { grid-template-columns:1fr; }
+  .layout { grid-template-columns:1fr; }
+  .sticker { position:relative; top:auto; right:auto; display:inline-block; margin:8px; }
+  .seal { width:80px; height:80px; font-size:10px; right:8%; bottom:9%; }
+  .letter:after { position:static; display:inline-block; margin-top:12px; }
+  .stats { gap:6px; }
+  .stat { padding:9px; }
+  .stat strong { font-size:26px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand">ROYAL RAILWAY <span>™ PROBABLY</span></div>
+    <div class="live">● LIVE // TRAIN IS LATE</div>
+  </header>
+  <main class="board" id="board"><section class="screen"></section></main>
+  <footer class="footer">
+    <span>Form RRA-404 · Lost in transit</span>
+    <span>Complaints? Please complain to the King.</span>
+  </footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const screen = () => $(".screen");
+
+const passengers = [
+  {
+    name:"Anand Menon", destination:"Bellweather", stamp:"Royal Crown",
+    royal:false, valid:true,
+    quote:"I have a perfectly normal ticket. Please don't make this weird.",
+    detail:"A sensible passenger. Suspiciously sensible."
+  },
+  {
+    name:"Mira Das", destination:"Somewhere Vague-ish", stamp:"Royal Crown",
+    royal:false, valid:false,
+    quote:"It's sort of near Northwick. Emotionally.",
+    detail:"The destination does not exist on the official railway map."
+  },
+  {
+    name:"Pip Turnip", destination:"Northwick", stamp:"A potato",
+    royal:false, valid:true,
+    quote:"The stamp is organic. Locally sourced. Very official.",
+    detail:"A potato has been pressed against the ticket."
+  },
+  {
+    name:"Captain Crumpet", destination:"Bellweather", stamp:"Royal Crown",
+    royal:true, valid:true,
+    quote:"My title is hereditary. My ticket is not.",
+    detail:"A royal title requires exactly three words in the ticket name."
+  },
+  {
+    name:"Mister Magnifico", destination:"Northwick", stamp:"Royal Crown",
+    royal:true, valid:true,
+    quote:"I used to be called Dave. The rebranding was expensive.",
+    detail:"The name on this ticket has only two words."
+  },
+  {
+    name:"The Velvet Violin", destination:"Bellweather", stamp:"Royal Crown",
+    royal:false, valid:true,
+    quote:"I'm a musician. My violin has its own ticket. Obviously.",
+    detail:"Three words in a name do not make a passenger royal."
+  },
+  {
+    name:"Definitely Not The King", destination:"Northwick", stamp:"Royal Crown",
+    royal:true, valid:true,
+    quote:"I am a humble citizen who definitely isn't wearing a crown.",
+    detail:"The royal-title rule applies. The name has five words."
+  },
+  {
+    name:"King Reginald", destination:"Somewhere Vague-ish", stamp:"None",
+    royal:true, valid:false, king:true,
+    quote:"Do you know who I am? This ticket is valid by royal vibes.",
+    detail:"The King has broken several rules. He is now looking directly at you."
+  }
+];
+
+let state = {};
+function reset() {
+  state = { index:0, stampRule:false, titleRule:false, score:0, history:[], ending:"" };
+}
+function render(html) { screen().innerHTML = html; window.scrollTo({top:0,behavior:"smooth"}); }
+
+function opening() {
+  reset();
+  render(`
+    <span class="sticker">NO REFUNDS<br>NO EXCEPTIONS*</span>
+    <p class="kicker">An administrative nightmare simulator</p>
+    <div class="intro-logo"><h1>TICKET<br><span>PLEASE,</span><br>YOUR MAJESTY!</h1></div>
+    <p class="lead">The King is late. The train is late. The paperwork is somehow earlier than both.</p>
+    <div class="station">
+      <span class="station-sign">KARUKUTTY CENTRAL · PLATFORM ???</span>
+      <div class="train"><i class="wheel"></i><i class="wheel two"></i></div>
+    </div>
+    <p class="small">YOU HAVE BEEN PROMOTED AGAINST YOUR WILL.</p>
+    <div class="btns"><button class="big-btn red-btn" onclick="intertitle()">START YOUR SHIFT →</button></div>
+    <div class="seal">ROYAL<br>SEAL<br>™</div>
+  `);
+}
+
+function intertitle() {
+  render(`<div class="blackout"><div>10:09 AM<br>KARUKUTTY CENTRAL<small>ONE TRAIN. EIGHT PASSENGERS. ZERO TRAINING.</small>
+  <div class="btns" style="justify-content:center"><button class="big-btn" onclick="decree()">CONTINUE →</button></div></div></div>`);
+}
+
+function decree() {
+  render(`
+    <p class="kicker">URGENT // OPEN IMMEDIATELY // PROBABLY</p>
+    <div class="letter stamp-anim">
+      <h2>Dear newly appointed Inspector,</h2>
+      <p>Congratulations on your appointment to the Royal Railway Authority. Your predecessor has requested to be transferred to a lighthouse. We wish you better luck.</p>
+      <p>Your first train departs shortly. Inspect the tickets, apply the current laws, and decide who may board. Any confusion caused by future changes to the laws is entirely your responsibility.</p>
+      <p>With royal regards,<br><strong>The Royal Railway Authority</strong></p>
+    </div>
+    <div class="btns"><button class="big-btn red-btn" onclick="welcome()">OKAY??? →</button></div>
+  `);
+}
+
+function welcome() {
+  render(`
+    <p class="kicker">Your workplace · The queue is already judging you</p>
+    <div class="dialogue"><div class="speaker">Rukku · Station announcer</div>
+      <p>“Welcome aboard, Inspector. The queue is already restless, the King is already late, and I haven't even had my tea.”</p>
+    </div>
+    <div class="station"><span class="station-sign">KARUKUTTY CENTRAL</span><div class="train"><i class="wheel"></i><i class="wheel two"></i></div></div>
+    <div class="btns"><button class="big-btn" onclick="rulebook()">REPORT FOR DUTY →</button></div>
+  `);
+}
+
+function rulebook() {
+  render(`
+    <p class="kicker">YOUR EMPLOYMENT CONTRACT HAS NO EXIT CLAUSE</p>
+    <h1>THE RULES.<br><span class="red">FOR NOW.</span></h1>
+    <p class="lead">At the beginning, there's only one rule. You'll learn by inspecting passengers, not by memorising a wall of legal text.</p>
+    <div class="rule-grid">
+      <div class="rule"><span class="num">LAW 01 / DESTINATIONS</span><h3>Go somewhere real.</h3><p>Bellweather and Northwick are official stations. Somewhere Vague-ish is not.</p></div>
+      <div class="rule"><span class="num">CURRENT STATUS</span><h3>Don't overthink it.</h3><p>No universal stamp rule. No three-word name rule. The government hasn't had that idea yet.</p></div>
+      <div class="rule"><span class="num">YOUR JOB</span><h3>Make the call.</h3><p>Check the ticket. Let them board or reject them. Learn from the consequences.</p></div>
+    </div>
+    <div class="dialogue"><div class="speaker">Rukku</div><p>“Two easy passengers to start. If anything goes wrong, we'll simply pretend this was a training exercise.”</p></div>
+    <div class="btns"><button class="big-btn red-btn" onclick="inspect(0)">INSPECT PASSENGER #1 →</button></div>
+  `);
+}
+
+
+function statusMarkup() {
+  return `
+    <div class="laws">
+      <div class="small">ACTIVE LAWS</div>
+
+      <div class="law good">
+        Official destination required
+      </div>
+
+      ${state.stampRule ? `
+        <div class="law good">
+          Royal Crown stamp required
+        </div>
+      ` : ""}
+
+      ${state.titleRule ? `
+        <div class="law good">
+          Royal names must have exactly 3 words
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+function inspect(index) {
+  state.index = index;
+  const p = passengers[index];
+  const count = p.name.trim().split(/\s+/).length;
+  const valid = p.valid && (!state.stampRule || p.stamp==="Royal Crown") && (!state.titleRule || !p.royal || count===3);
+  const final = !!p.king;
+
+  render(`
+    <div class="progress">${passengers.slice(0,8).map((_,i)=>`<span class="${i<=index?"on":""}"></span>`).join("")}</div>
+    <p class="kicker">${final?"FINAL PASSENGER · OH NO":"PASSENGER "+(index+1)+" / 8 · NEXT!"}</p>
+    <h1>${final?"THE KING?":"NEXT IN THE QUEUE."}</h1>
+    <p class="lead">${final?"The entire station has gone quiet. Even the clock is nervous.":"Another citizen approaches the counter. The train waits. The laws may not."}</p>
+    ${final?`<div class="notice">BREAKING: HIS MAJESTY HAS ARRIVED. HIS TICKET HAS NOT IMPROVED.</div>`:""}
+    <div class="layout">
+      <div class="ticket">
+        <div class="ticket-title">ROYAL RAILWAY AUTHORITY · PASSENGER COPY</div>
+        <h2 class="passenger-name">${p.name}</h2>
+        <div class="field"><span>DESTINATION</span><strong>${p.destination}</strong></div>
+        <div class="field"><span>ROYAL CROWN STAMP</span><strong>${p.stamp}</strong></div>
+        <div class="field"><span>ROYAL TITLE?</span><strong>${p.royal?"YES. UNFORTUNATELY.":"NO."}</strong></div>
+        <div class="field"><span>WORDS IN TICKET NAME</span><strong>${count}</strong></div>
+        <div class="tape">DO NOT EAT THE TICKET</div>
+      </div>
+      <aside class="aside">
+        <div class="speaker">Passenger statement</div>
+        <p class="quote">“${p.quote}”</p>
+        <p>${p.detail}</p>
+        ${statusMarkup()}
+      </aside>
+    </div>
+    <div class="decision">
+      <h2>${final?"WHAT WILL YOU DO, INSPECTOR?":"BOARD OR BUST?"}</h2>
+      <p>Apply every law that is currently active. The rules do not care about your feelings. The King might.</p>
+      <div class="btns">
+        <button class="big-btn green-btn" onclick="decide(true)">LET THEM BOARD ✓</button>
+        <button class="big-btn red-btn" onclick="decide(false)">REJECT PASSENGER ✕</button>
+      </div>
+    </div>
+    <div id="feedback"></div>
+  `);
+}
+
+
+function decide(accepted) {
+  if ($("#feedback").innerHTML) return;
+
+  const p = passengers[state.index];
+  const words = p.name.trim().split(/\s+/).length;
+
+  const valid =
+    p.valid &&
+    (!state.stampRule || p.stamp === "Royal Crown") &&
+    (!state.titleRule || !p.royal || words === 3);
+
+  const correct = accepted === valid;
+
+  if (correct) {
+    state.score++;
+  }
+
+  state.history.push({
+    name: p.name,
+    accepted,
+    correct,
+    valid
+  });
+
+  const mistakes = state.history.filter(h => !h.correct).length;
+
+  // SECOND MISTAKE = IMMEDIATE GAME OVER
+  if (mistakes >= 2) {
+    render(`
+      <p class="kicker">ROYAL RAILWAY AUTHORITY · DISCIPLINARY ACTION</p>
+
+      <h1 style="color:var(--red)">
+        PROSECUTED.
+      </h1>
+
+      <div class="dialogue">
+        <div class="speaker">OFFICIAL CHARGES</div>
+        <p>
+          You have made your second incorrect decision.
+          The Royal Railway Authority has revoked your inspector's
+          licence and ordered your immediate prosecution.
+        </p>
+      </div>
+
+      <div class="notice">
+        YOUR SHIFT HAS BEEN TERMINATED.
+        FURTHER PASSENGER INSPECTIONS ARE PROHIBITED.
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <strong>${state.score}</strong>
+          <span>Correct decisions</span>
+        </div>
+        <div class="stat">
+          <strong>${mistakes}</strong>
+          <span>Mistakes</span>
+        </div>
+        <div class="stat">
+          <strong>GUILTY</strong>
+          <span>Final verdict</span>
+        </div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">Rukku · final announcement</div>
+        <p>
+          “You're being prosecuted?! On your second mistake?!
+          Honestly, Inspector, I haven't even finished my tea.”
+        </p>
+      </div>
+
+      <div class="btns">
+        <button class="big-btn red-btn" onclick="opening()">
+          START A NEW SHIFT ↻
+        </button>
+      </div>
+    `);
+
+    return; // STOP THE GAME HERE
+  }
+
+  const feedback = $("#feedback");
+  feedback.className = "feedback " + (correct ? "" : "wrong");
+
+  const explanation = valid
+    ? "This ticket satisfies all currently active laws."
+    : "This ticket violates: " + [
+        !p.valid ? "the official destination rule" : "",
+        state.stampRule && p.stamp !== "Royal Crown"
+          ? "the Royal Crown stamp rule" : "",
+        state.titleRule && p.royal && words !== 3
+          ? "the three-word royal name rule" : ""
+      ].filter(Boolean).join("; ") + ".";
+
+  if (p.king) {
+    feedback.innerHTML = `
+      <h2>${correct ? "CORRECT CALL!" : "INCORRECT!"}</h2>
+      <p>${explanation}</p>
+      <p>The King is waiting for your final decision.</p>
+      <div class="options">
+        <button class="option" onclick="ending('reject')">
+          <strong>REJECT THE KING</strong>
+          Enforce the law. Upset His Majesty.
+        </button>
+        <button class="option" onclick="ending('mercy')">
+          <strong>LET HIM BOARD</strong>
+          Break the law. Face the consequences.
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  let nextButton = "";
+
+  if (state.index === 1) {
+    nextButton = `<button class="big-btn" onclick="stampDecree()">READ URGENT DECREE →</button>`;
+  } else if (state.index === 3) {
+    nextButton = `<button class="big-btn" onclick="titleDecree()">READ THE NEW DECREE →</button>`;
+  } else {
+    nextButton = `<button class="big-btn" onclick="inspect(${state.index + 1})">NEXT PASSENGER →</button>`;
+  }
+
+  feedback.innerHTML = `
+    <h2>${correct ? "CORRECT CALL!" : "INCORRECT DECISION!"}</h2>
+    <p>${explanation}</p>
+    <p>Mistakes: ${mistakes}/2</p>
+    <div class="btns">${nextButton}</div>
+  `;
+}
+
+
+function stampDecree() {
+  state.stampRule = true;
+  render(`
+    <p class="kicker">URGENT ROYAL DISPATCH · ARRIVED BY VERY FAST PIGEON</p>
+    <div class="letter stamp-anim">
+      <span class="tape">NEW LAW · EFFECTIVE IMMEDIATELY</span>
+      <h1>RULE 02:<br><span class="red">STAMP IT.</span></h1>
+      <p>By order of His Majesty, every ticket must carry the <strong>Royal Crown stamp</strong>. Effective immediately. Previous tickets are not exempt. Previous conversations are not legally binding.</p>
+      <p>The Authority declines to comment on why a potato is available at the ticket counter.</p>
+    </div>
+    <div class="dialogue"><div class="speaker">Rukku</div><p>“That includes passengers who were perfectly fine thirty seconds ago. I don't write the decrees. I merely announce the disasters.”</p></div>
+    <div class="btns"><button class="big-btn red-btn" onclick="inspect(2)">INSPECT PIP TURNIP →</button></div>
+  `);
+}
+
+function titleDecree() {
+  state.titleRule = true;
+  render(`
+    <p class="kicker">URGENT ROYAL DISPATCH · AGAIN???</p>
+    <div class="letter stamp-anim">
+      <span class="tape">NEW LAW · NO APPEALS</span>
+      <h1>RULE 03:<br><span class="red">THREE WORDS.</span></h1>
+      <p>Any passenger carrying a royal title must present a ticket with <strong>exactly three words in their name</strong>. The Royal Office confirms this decree was written in a moving carriage and reviewed by absolutely nobody.</p>
+    </div>
+    <div class="dialogue"><div class="speaker">Rukku</div><p>“Destination. Crown stamp. And now royal grammar. I wonder whether the King has ever actually travelled by train.”</p></div>
+    <div class="btns"><button class="big-btn red-btn" onclick="inspect(4)">FACE THE QUEUE →</button></div>
+  `);
+}
+
+// After the two introductory passengers, the first new law arrives.
+const oldDecide = decide;
+decide = function(accepted) {
+  if ($("#feedback").innerHTML) return;
+  oldDecide(accepted);
+  if (state.index===1) {
+    const f=$("#feedback");
+    f.innerHTML = f.innerHTML.replace(
+      /<button class="big-btn" onclick="stampDecree\(\)">READ URGENT DECREE →<\/button>/,
+      '<button class="big-btn" onclick="stampDecree()">READ URGENT DECREE →</button>'
+    );
+  }
+  if (state.index===3) {
+    const f=$("#feedback");
+    f.innerHTML = f.innerHTML.replace(
+      /<button class="big-btn" onclick="inspect\(4\)">NEXT PASSENGER →<\/button>/,
+      '<button class="big-btn" onclick="titleDecree()">READ THE NEW DECREE →</button>'
+    );
+  }
+};
+
+
+
+function ending(choice) {
+  state.ending = choice;
+
+  const mistakes = state.history.filter(h => !h.correct).length;
+  const perfect = mistakes === 0;
+
+  let title, description, result, rukku;
+
+  if (mistakes >= 3) {
+    title = "PROSECUTED!";
+    description =
+      "The Royal Railway Authority has filed charges against you for repeated failures to enforce railway law.";
+    result =
+      "Your inspector badge has been confiscated. You are summoned to the Royal Court to explain your decisions. Your defence that the laws kept changing has been marked 'irrelevant'.";
+    rukku =
+      "“THREE mistakes too many! I told you to read the tickets. I didn't say the laws would make sense!”";
+  } else if (perfect && choice === "reject") {
+    title = "PROMOTED!";
+    description =
+      "Every decision was correct, and you refused to give the King special treatment.";
+    result =
+      "His Majesty is absolutely furious. But the Royal Railway Authority values consistent enforcement. Congratulations, Senior Railway Inspector!";
+    rukku =
+      "“YOU REJECTED THE KING AND GOT PROMOTED? I'm framing this moment.”";
+  } else if (perfect && choice !== "reject") {
+    title = "YOU LOSE!";
+    description =
+      "You had a perfect record until you let the King board with an invalid ticket.";
+    result =
+      "The King is upset that you failed to enforce the law. Your promotion is cancelled. Perhaps the lighthouse has a vacancy.";
+    rukku =
+      "“You were doing SO WELL. WHAT HAPPENED AT THE LAST TICKET COUNTER?!”";
+  } else if (choice === "reject") {
+    title = "THE KING IS FURIOUS!";
+    description =
+      "You upheld the law against the King, but earlier mistakes have damaged your record.";
+    result =
+      "You keep your job, for now. Promotion is postponed, and additional paperwork awaits.";
+    rukku =
+      "“Well, at least you got the King part right.”";
+  } else {
+    title = "A ROYAL DISASTER!";
+    description =
+      "You made mistakes during your shift and allowed the King to board with an invalid ticket.";
+    result =
+      "The King is displeased, your supervisor is disappointed, and Rukku is looking for another job.";
+    rukku =
+      "“I'm updating my lighthouse application tonight.”";
+  }
+
+  render(`
+    <p class="kicker">ROYAL RAILWAY AUTHORITY · FINAL VERDICT</p>
+    <h1>${title}</h1>
+
+    <div class="dialogue">
+      <div class="speaker">OFFICIAL CHARGES / VERDICT</div>
+      <p>${description}</p>
+    </div>
+
+    <p class="lead">${result}</p>
+
+    <div class="stats">
+      <div class="stat">
+        <strong>${state.score}/${state.history.length}</strong>
+        <span>Correct decisions</span>
+      </div>
+      <div class="stat">
+        <strong>${mistakes}</strong>
+        <span>Mistakes</span>
+      </div>
+      <div class="stat">
+        <strong>${mistakes >= 3 ? "GUILTY" : perfect ? "CLEAN" : "REVIEW"}</strong>
+        <span>Final record</span>
+      </div>
+    </div>
+
+    <div class="notice">
+      ROYAL NOTICE: The Authority reserves the right to prosecute inspectors
+      who make three or more incorrect decisions.
+    </div>
+
+    <div class="dialogue">
+      <div class="speaker">Rukku · last announcement</div>
+      <p>${rukku}</p>
+    </div>
+
+    <div class="btns">
+      <button class="big-btn red-btn" onclick="opening()">
+        REPLAY YOUR SHIFT ↻
+      </button>
+    </div>
+  `);
+}
+
+function report() {
+  const total=state.history.length;
+  const accuracy=total?Math.round(state.score/total*100):0;
+  const title=accuracy===100?"THE IMPOSSIBLY COMPETENT INSPECTOR":accuracy>=70?"A RESPECTABLE RAILWAY CAREER":accuracy>=40?"A BUREAUCRATIC LEARNING EXPERIENCE":"A PUBLIC INCIDENT";
+  render(`
+    <p class="kicker">ROYAL RAILWAY AUTHORITY · END OF SHIFT</p>
+    <h1>SHIFT<br><span class="red">REPORT.</span></h1>
+    <h2>${title}</h2>
+    <p class="lead">The train has departed. The paperwork has not. Here's how your first shift went.</p>
+    <div class="stats">
+      <div class="stat"><strong>${state.score}/${total}</strong><span>Correct calls</span></div>
+      <div class="stat"><strong>${accuracy}%</strong><span>Accuracy</span></div>
+      <div class="stat"><strong>${total-state.score}</strong><span>Incorrect calls</span></div>
+    </div>
+    <div class="rule"><span class="num">YOUR FINAL RULING</span><h3>${state.ending.toUpperCase()}</h3><p>It will probably be discussed at the next meeting. The meeting has been postponed.</p></div>
+    <h2 style="margin-top:30px">INSPECTION RECORD</h2>
+    ${state.history.map((h,i)=>`<div class="field"><strong>${i+1}. ${h.name}</strong><br><span>${h.accepted?"ALLOWED TO BOARD":"REJECTED"} · ${h.correct?"CORRECT CALL":"INCORRECT CALL"}</span></div>`).join("")}
+    <div class="dialogue"><div class="speaker">Rukku</div><p>“Not bad for your first day. Your predecessor did ask for that lighthouse transfer before lunch, though.”</p></div>
+    <div class="btns"><button class="big-btn red-btn" onclick="opening()">REPLAY YOUR TERRIBLE SHIFT ↻</button></div>
+  `);
+}
+
+opening();
+</script>
+</body>
+</html>
