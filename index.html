@@ -59,11 +59,28 @@ h3 { font-size:21px; }
 p { line-height:1.6; }
 .lead { font-size:18px; max-width:650px; }
 .small { font:11px "DM Mono",monospace; text-transform:uppercase; }
+
+
 .big-btn {
-  display:inline-block; background:var(--yellow); border:3px solid var(--black);
-  box-shadow:5px 5px 0 var(--black); padding:16px 21px;
-  font-weight:700;font-color:black; text-transform:uppercase; transition:.15s;
+  display: inline-block;
+  background: var(--yellow);
+  color: #171713 !important;
+  border: 3px solid #171713;
+  box-shadow: 5px 5px 0 #171713;
+  padding: 16px 21px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: .15s;
+  opacity: 1;
+  visibility: visible;
 }
+
+
+.blackout .big-btn {
+  color: var(--black);
+  background: var(--yellow);
+}
+
 .red-btn { background:var(--red); color:white; }
 .blue-btn { background:var(--blue); color:white; }
 .green-btn { background:var(--green); }
@@ -265,6 +282,7 @@ p { line-height:1.6; }
   .stat { padding:9px; }
   .stat strong { font-size:26px; }
 /* ROYAL SEAL: DROP, SLAM, AND BOUNCE */
+
 @keyframes seal-slam {
   0% {
     opacity: 0;
@@ -702,6 +720,34 @@ p { line-height:1.6; }
     bottom: 5%;
   }
 }
+
+.blackout .big-btn,
+.blackout .btns button {
+  color: #171713 !important;
+  background-color: #f5ff38 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative;
+  z-index: 10;
+}
+
+button,
+button *,
+.big-btn,
+.blackout button {
+  -webkit-text-fill-color: #171713 !important;
+  color: #171713 !important;
+  text-shadow: none !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.blackout button {
+  background: #f5ff38 !important;
+}
+
 </style>
 </head>
 <body>
@@ -723,15 +769,15 @@ const screen = () => $(".screen");
 
 const passengers = [
   {
-    name:"Anand Menon", destination:"Bellweather", stamp:"Royal Crown",
+    name:"Ganapathi", destination:"Chelakkara", stamp:"Royal Crown",
     royal:false, valid:true,
-    quote:"I have a perfectly normal ticket. Please don't make this weird.",
-    detail:"A sensible passenger. Suspiciously sensible."
+    quote:"Paalum pazhavum kayykalil enthi...paalum pazhavum...",
+    detail:"A sensible kid. Just keeps singing a certain song about plaintains and dairy."
   },
   {
-    name:"Mira Das", destination:"Somewhere Vague-ish", stamp:"Royal Crown",
+    name:"Ashley Thankachan", destination:"Somewhere Vague-ish with Justin Chettan", stamp:"Royal Crown",
     royal:false, valid:false,
-    quote:"It's sort of near Northwick. Emotionally.",
+    quote:"Justin chettan chill aanu.",
     detail:"The destination does not exist on the official railway map."
   },
   {
@@ -741,9 +787,9 @@ const passengers = [
     detail:"A potato has been pressed against the ticket."
   },
   {
-    name:"Captain Crumpet", destination:"Bellweather", stamp:"Royal Crown",
+    name:"Georgekutty", destination:"Thodupuzha", stamp:"Royal Crown",
     royal:true, valid:true,
-    quote:"My title is hereditary. My ticket is not.",
+    quote:"njanm ente family m oru dhyanathin pokuva",
     detail:"A royal title requires exactly three words in the ticket name."
   },
   {
@@ -765,9 +811,9 @@ const passengers = [
     detail:"The royal-title rule applies. The name has five words."
   },
   {
-    name:"King Reginald", destination:"Somewhere Vague-ish", stamp:"None",
+    name:"Bellari Raja", destination:"Somewhere Vague-ish", stamp:"None",
     royal:true, valid:false, king:true,
-    quote:"Do you know who I am? This ticket is valid by royal vibes.",
+    quote:"Do you know who I am? I am Raja, Bellari Raja",
     detail:"The King has broken several rules. He is now looking directly at you."
   }
 ];
@@ -797,7 +843,13 @@ function opening() {
 
 function intertitle() {
   render(`<div class="blackout"><div>10:09 AM<br>KARUKUTTY CENTRAL<small>ONE TRAIN. EIGHT PASSENGERS. ZERO TRAINING.</small>
-  <div class="btns" style="justify-content:center"><button class="big-btn" onclick="decree()">CONTINUE →</button></div></div></div>`);
+  
+<div class="btns" style="justify-content:center">
+  <button class="big-btn" onclick="decree()">
+    CONTINUE <span aria-hidden="false">&rarr;</span>
+  </button>
+</div>
+</div>`);
 }
 
 function decree() {
@@ -830,8 +882,7 @@ function rulebook() {
     <h1>THE RULES.<br><span class="red">FOR NOW.</span></h1>
     <p class="lead">At the beginning, there's only one rule. You'll learn by inspecting passengers, not by memorising a wall of legal text.</p>
     <div class="rule-grid">
-      <div class="rule"><span class="num">LAW 01 / DESTINATIONS</span><h3>Go somewhere real.</h3><p>Bellweather and Northwick are official stations. Somewhere Vague-ish is not.</p></div>
-      <div class="rule"><span class="num">CURRENT STATUS</span><h3>Don't overthink it.</h3><p>No universal stamp rule. No three-word name rule. The government hasn't had that idea yet.</p></div>
+      <div class="rule"><span class="num">LAW 01 / DESTINATIONS</span><h3>Go somewhere real.</h3><p>Thodupuzha and Thamarassery Choram are official stations. Swargam is not.</p></div>
       <div class="rule"><span class="num">YOUR JOB</span><h3>Make the call.</h3><p>Check the ticket. Let them board or reject them. Learn from the consequences.</p></div>
     </div>
     <div class="dialogue"><div class="speaker">Rukku</div><p>“Two easy passengers to start. If anything goes wrong, we'll simply pretend this was a training exercise.”</p></div>
