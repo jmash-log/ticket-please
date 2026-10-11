@@ -748,6 +748,26 @@ button *,
   background: #f5ff38 !important;
 }
 
+.passenger-portrait {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: 250px;
+  object-fit: cover;
+  object-position: center top;
+  margin: 0 auto 20px;
+  border: 4px solid var(--black);
+  box-shadow: 6px 6px 0 var(--black);
+  background: var(--pink);
+}
+
+@media (max-width: 700px) {
+  .passenger-portrait {
+    max-width: 220px;
+    height: 220px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -767,56 +787,66 @@ button *,
 const $ = s => document.querySelector(s);
 const screen = () => $(".screen");
 
+
 const passengers = [
   {
-    name:"Ganapathi", destination:"Chelakkara", stamp:"Royal Crown",
+    name:"Ganapathi", image:"ganapathy.png",
+    destination:"Chelakkara", stamp:"Royal Crown",
     royal:false, valid:true,
     quote:"Paalum pazhavum kayykalil enthi...paalum pazhavum...",
     detail:"A sensible kid. Just keeps singing a certain song about plaintains and dairy."
   },
   {
-    name:"Ashley Thankachan", destination:"Somewhere Vague-ish with Justin Chettan", stamp:"Royal Crown",
+    name:"Ashley Thankachan", image:"ashley.png",
+    destination:"Somewhere Vague-ish with Justin Chettan", stamp:"Royal Crown",
     royal:false, valid:false,
     quote:"Justin chettan chill aanu.",
     detail:"The destination does not exist on the official railway map."
   },
   {
-    name:"Ramanan", destination:"Punjab", stamp:"A chapathi",
+    name:"Ramanan", image:"ramanan.png",
+    destination:"Punjab", stamp:"A chapathi",
     royal:false, valid:true,
     quote:"No chapathi only choru, not the thief kind ofc...",
     detail:"A chapathi has been pressed against the ticket."
   },
   {
-    name:"Georgekutty", destination:"Thodupuzha", stamp:"Royal Crown",
+    name:"Georgekutty", image:"georgekutty.png",
+    destination:"Thodupuzha", stamp:"Royal Crown",
     royal:true, valid:true,
     quote:"njanm ente family m oru dhyanathin pokuva",
     detail:"A royal title requires exactly three words in the ticket name."
   },
   {
-    name:"Kannan Srank", destination:"Palakkad", stamp:"Royal Crown",
+    name:"Kannan Srank", image:"kannansrank.png",
+    destination:"Palakkad", stamp:"Royal Crown",
     royal:true, valid:true,
     quote:"Pand naad virappichirunna veeran until Bellari Raja showed up.",
     detail:"The name on this ticket has only two words."
   },
   {
-    name:"Monayi", destination:"Dennis Sir nte farmouse-uh", stamp:"Royal Crown",
+    name:"Monayi", image:"monayi.png",
+    destination:"Dennis Sir nte farmouse-uh", stamp:"Royal Crown",
     royal:false, valid:true,
     quote:"Njan oru mimicry kaanikkatte. oru eliye?",
     detail:"Being funny do not make a passenger royal."
   },
   {
-    name:"Chakkutty", destination:"Srihalli", stamp:"Royal Crown",
+    name:"Chakkutty", image:"chakkutty.png",
+    destination:"Srihalli", stamp:"Royal Crown",
     royal:true, valid:true,
     quote:"Thannaaranenn thanikkariyillel than ennod chodikku...bakki pinne paraya.",
     detail:"The royal-title rule applies. The name has 1 word."
   },
   {
-    name:"Bellari Raja", destination:"njan rajava, i go where i want", stamp:"None",
+    name:"Bellari Raja", image:"bellariraja.png",
+    destination:"njan rajava, i go where i want", stamp:"None",
     royal:true, valid:false, king:true,
     quote:"Do you know who I am? I am Raja, Bellari Raja",
     detail:"The King has broken several rules. He is now looking directly at you."
   }
 ];
+
 
 let state = {};
 function reset() {
@@ -955,9 +985,19 @@ ${final?`<div class="notice">BREAKING: HIS MAJESTY HAS ARRIVED. HIS TICKET HAS N
 
 <div class="layout">
 
-      <div class="ticket">
-        <div class="ticket-title">ROYAL RAILWAY AUTHORITY · PASSENGER COPY</div>
-        <h2 class="passenger-name">${p.name}</h2>
+      
+<div class="ticket">
+  <div class="ticket-title">ROYAL RAILWAY AUTHORITY · PASSENGER COPY</div>
+
+  <img
+    class="passenger-portrait"
+    src="${p.image}"
+    alt="${p.name}"
+    onerror="this.style.display='none'"
+  >
+
+  <h2 class="passenger-name">${p.name}</h2>
+
         <div class="field"><span>DESTINATION</span><strong>${p.destination}</strong></div>
         <div class="field"><span>ROYAL CROWN STAMP</span><strong>${p.stamp}</strong></div>
         <div class="field"><span>ROYAL TITLE?</span><strong>${p.royal?"YES. UNFORTUNATELY.":"NO."}</strong></div>
