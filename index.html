@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ticket Please, Your Majesty!</title>
+<title>Ticket Edu, Money!</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&family=Bowlby+One+SC&display=swap');
 
@@ -781,10 +781,10 @@ const passengers = [
     detail:"The destination does not exist on the official railway map."
   },
   {
-    name:"Pip Turnip", destination:"Northwick", stamp:"A potato",
+    name:"Ramanan", destination:"Punjab", stamp:"A chapathi",
     royal:false, valid:true,
-    quote:"The stamp is organic. Locally sourced. Very official.",
-    detail:"A potato has been pressed against the ticket."
+    quote:"No chapathi only choru, not the thief kind ofc...",
+    detail:"A chapathi has been pressed against the ticket."
   },
   {
     name:"Georgekutty", destination:"Thodupuzha", stamp:"Royal Crown",
@@ -793,25 +793,25 @@ const passengers = [
     detail:"A royal title requires exactly three words in the ticket name."
   },
   {
-    name:"Mister Magnifico", destination:"Northwick", stamp:"Royal Crown",
+    name:"Kannan Srank", destination:"Palakkad", stamp:"Royal Crown",
     royal:true, valid:true,
-    quote:"I used to be called Dave. The rebranding was expensive.",
+    quote:"Pand naad virappichirunna veeran until Bellari Raja showed up.",
     detail:"The name on this ticket has only two words."
   },
   {
-    name:"The Velvet Violin", destination:"Bellweather", stamp:"Royal Crown",
+    name:"Monayi", destination:"Dennis Sir nte farmouse-uh", stamp:"Royal Crown",
     royal:false, valid:true,
-    quote:"I'm a musician. My violin has its own ticket. Obviously.",
-    detail:"Three words in a name do not make a passenger royal."
+    quote:"Njan oru mimicry kaanikkatte. oru eliye?",
+    detail:"Being funny do not make a passenger royal."
   },
   {
-    name:"Definitely Not The King", destination:"Northwick", stamp:"Royal Crown",
+    name:"Chakkutty", destination:"Srihalli", stamp:"Royal Crown",
     royal:true, valid:true,
-    quote:"I am a humble citizen who definitely isn't wearing a crown.",
-    detail:"The royal-title rule applies. The name has five words."
+    quote:"Thannaaranenn thanikkariyillel than ennod chodikku...bakki pinne paraya.",
+    detail:"The royal-title rule applies. The name has 1 word."
   },
   {
-    name:"Bellari Raja", destination:"Somewhere Vague-ish", stamp:"None",
+    name:"Bellari Raja", destination:"njan rajava, i go where i want", stamp:"None",
     royal:true, valid:false, king:true,
     quote:"Do you know who I am? I am Raja, Bellari Raja",
     detail:"The King has broken several rules. He is now looking directly at you."
@@ -829,7 +829,7 @@ function opening() {
   render(`
     <span class="sticker">NO REFUNDS<br>NO EXCEPTIONS*</span>
     <p class="kicker">An administrative nightmare simulator</p>
-    <div class="intro-logo"><h1>TICKET<br><span>PLEASE,</span><br>YOUR MAJESTY!</h1></div>
+    <div class="intro-logo"><h1>TICKET<br><span>EDU</span><br>MONEYY!</h1></div>
     <p class="lead">The King is late. The train is late. The paperwork is somehow earlier than both.</p>
     <div class="station">
       <span class="station-sign">KARUKUTTY CENTRAL · PLATFORM ???</span>
@@ -969,7 +969,9 @@ ${final?`<div class="notice">BREAKING: HIS MAJESTY HAS ARRIVED. HIS TICKET HAS N
         <p class="quote">“${p.quote}”</p>
         <p>${p.detail}</p>
         ${statusMarkup()}
+
       </aside>
+
     </div>
     <div class="decision">
       <h2><br>${final?"WHAT WILL YOU DO, INSPECTOR?":"BOARD OR BUST?"}</h2>
